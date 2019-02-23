@@ -1,0 +1,2 @@
+# gotestlint
+test linter
