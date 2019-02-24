@@ -34,10 +34,6 @@ func (l *Linter) LintFiles(files map[string][]byte) ([]Advise, error) {
 	return pkg.lint()
 }
 
-const (
-	default_info = "there're not have any tests for"
-)
-
 type Advise struct {
 	fName    string
 	position token.Position
@@ -45,7 +41,7 @@ type Advise struct {
 }
 
 func (a Advise) String() string {
-	return fmt.Sprintf("%s:%d:%s %s", a.file.filename, a.position.Line, default_info, a.fName)
+	return fmt.Sprintf("%s:%d:function %s is not covered any tests", a.file.filename, a.position.Line, a.fName)
 }
 
 type pkg struct {
