@@ -8,8 +8,8 @@ invoke gotestlint with one argument, that's path to package ```gotestlint``` doe
 
 ```
 $ gotestlint .
-lint.go:20:there're not have any tests for LintFiles
-lint.go:47:there're not have any tests for String
+lint.go:20:function LintFiles is not covered any tests
+lint.go:47:function String is not covered any tests
 ```
 
 if there're all functions covered by tests,
@@ -18,3 +18,6 @@ it won't show any messages
 ```
 $ gotestlint $GOPATH/src/github.com/your_the_best_project
 ```
+
+you can add option ```nolint: gotestlint``` in comment your function
+if function is marked such way, ```gotestlint``` ignores that function
