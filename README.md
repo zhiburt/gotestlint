@@ -4,10 +4,7 @@ it shows functions not had been covered by tests
 
 ## Usage
 
-invoke gotestlint with one argument, that's path to package
-
-```gotestlint``` doesn't go through your folders (don't recursive)
-one checks only one package
+invoke gotestlint with one argument, that's path to package ```gotestlint``` doesn't go through your folders (don't recursive). The one checks only one package
 
 ```
 $ gotestlint .
