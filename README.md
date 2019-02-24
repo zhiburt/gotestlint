@@ -1,4 +1,5 @@
 gotestlint is a linter for Go source code
+
 it shows functions not had been covered by tests
 
 ## Usage
