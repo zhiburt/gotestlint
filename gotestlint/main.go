@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	lint "github.com/gotestlint"
 )
@@ -22,6 +23,8 @@ func main() {
 
 	l := lint.Linter{}
 	resp, err := l.LintFiles(files)
+	_handleError(err)
+
 	for _, problem := range resp {
 		fmt.Println(problem)
 	}
@@ -38,6 +41,9 @@ func parseFolder(path string) (map[string][]byte, error) {
 
 	for _, info := range information {
 		if info.IsDir() {
+			continue
+		}
+		if strings.HasSuffix(info.Name(), ".go") == false {
 			continue
 		}
 
