@@ -44,7 +44,7 @@ type Advise struct {
 }
 
 func (a Advise) String() string {
-	return fmt.Sprintf("%s %s line %d", default_info, strings.ToUpper(a.fName), a.position.Line)
+	return fmt.Sprintf("%s:%d:%s %s", a.file.f.Name.Name, a.position.Line, default_info, a.fName)
 }
 
 type pkg struct {
@@ -123,7 +123,7 @@ func (f *file) exportedFuncs() []exportFunc {
 				funcs = append(funcs, exportFunc{
 					file: f,
 					f:    fun,
-					pos:  f.f.Pos(),
+					pos:  fun.Pos(),
 				})
 			}
 		}
