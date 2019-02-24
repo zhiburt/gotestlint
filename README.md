@@ -20,4 +20,13 @@ $ gotestlint $GOPATH/src/github.com/your_the_best_project
 ```
 
 you can add option ```nolint: gotestlint``` in comment your function
-if function is marked such way, ```gotestlint``` ignores that function
+if function is marked such way, ```gotestlint``` ignores that function,
+for example
+
+```
+// Foo ...
+// 
+// nolint: gotestlint
+func Foo(){
+}
+```
