@@ -27,7 +27,7 @@ func (l *Linter) LintFiles(files map[string][]byte) ([]Advise, error) {
 			return nil, err
 		}
 
-		pkg.files[name] = &file{f: f}
+		pkg.files[name] = &file{f: f, filename: name}
 	}
 
 	return pkg.lint()
@@ -44,7 +44,7 @@ type Advise struct {
 }
 
 func (a Advise) String() string {
-	return fmt.Sprintf("%s:%d:%s %s", a.file.f.Name.Name, a.position.Line, default_info, a.fName)
+	return fmt.Sprintf("%s:%d:%s %s", a.file.filename, a.position.Line, default_info, a.fName)
 }
 
 type pkg struct {
@@ -92,7 +92,8 @@ func (p *pkg) testFileFor(f *file) *file {
 }
 
 type file struct {
-	f *ast.File
+	f        *ast.File
+	filename string // with sufix
 }
 
 func (f *file) funcWithPrefix(prefix string) (exportFunc, error) {
