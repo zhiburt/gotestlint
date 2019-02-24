@@ -83,7 +83,7 @@ func (p *pkg) lint() ([]Advise, error) {
 
 func (p *pkg) testFileFor(f *file) *file {
 	for filename := range p.files {
-		if strings.HasSuffix(f.f.Name.Name, "_test") {
+		if strings.HasPrefix(filename, f.f.Name.Name) && strings.HasSuffix(filename, "_test.go") {
 			return p.files[filename]
 		}
 	}
