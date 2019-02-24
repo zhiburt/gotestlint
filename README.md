@@ -13,7 +13,7 @@ lint.go:20:there're not have any tests for LintFiles
 lint.go:47:there're not have any tests for String
 ```
 
-if there're all functions cover by tests,
+if there're all functions covered by tests,
 it won't show any messages
 
 ```
