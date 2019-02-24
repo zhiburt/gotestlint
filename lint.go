@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"regexp"
 	"strings"
 )
 
@@ -57,6 +58,9 @@ func (p *pkg) lint() ([]Advise, error) {
 	for _, file := range p.files {
 		for _, f := range file.exportedFuncs() {
 			if f.isTestFunc() {
+				continue
+			}
+			if f.isNolint() {
 				continue
 			}
 
@@ -139,6 +143,21 @@ type exportFunc struct {
 	pos  token.Pos
 }
 
-func (efoo *exportFunc) isTestFunc() bool {
-	return strings.HasPrefix(efoo.f.Name.Name, "Test")
+func (foo *exportFunc) isTestFunc() bool {
+	return strings.HasPrefix(foo.f.Name.Name, "Test")
+}
+
+func (foo *exportFunc) isNolint() bool {
+	if foo.f.Doc == nil {
+		return false
+	}
+
+	r := regexp.MustCompile(`\s+nolint:.*gotestlint`)
+	for _, comment := range foo.f.Doc.List {
+		if r.MatchString(comment.Text) {
+			return true
+		}
+	}
+
+	return false
 }
