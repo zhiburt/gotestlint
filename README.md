@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/zhiburt/gotestlint)](https://goreportcard.com/report/github.com/zhiburt/gotestlint)
+[![GoDoc](https://godoc.org/github.com/zhiburt/gotestlint?status.svg)](https://godoc.org/github.com/zhiburt/gotestlint)
+
+
 gotestlint is a linter for Go source code
 
 it shows functions not had been covered by tests
