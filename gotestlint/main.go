@@ -31,10 +31,16 @@ func main() {
 	}
 }
 
-var ParseFolderErr = errors.New("can't parse folder")
+// ErrParseFolder mean that erorr hapened when was reading a folder
+var ErrParseFolder = errors.New("can't parse folder")
+
+// ErrNoGOFile mean that you try parse no golang file
 var ErrNoGOFile = errors.New("can't parse no .go file")
+
+// ErrParseFile mean that erorr hapened when was reading a file
 var ErrParseFile = errors.New("can't parse file")
 
+// RECURSIVEPATH represents marker for recursive call on all go files
 const RECURSIVEPATH = "./..."
 
 func parse(path string) (map[string][]byte, error) {
@@ -53,7 +59,7 @@ func parseFolder(path string, recursive bool) (map[string][]byte, error) {
 	files := make(map[string][]byte)
 	information, err := ioutil.ReadDir(path)
 	if err != nil {
-		return nil, ParseFolderErr
+		return nil, ErrParseFolder
 	}
 
 	for _, info := range information {
