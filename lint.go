@@ -10,13 +10,20 @@ import (
 	"strings"
 )
 
+//Linter is represent of this linter
 type Linter struct {
 }
 
+// LintSource lint only one file
+// where filename is file name
+// and source is the one's content
 func (l *Linter) LintSource(filename string, source []byte) ([]Advise, error) {
 	return l.LintFiles(map[string][]byte{filename: source})
 }
 
+// LintFiles lint all files from map
+// where a key of map is a name of file
+// and a value is content of this file
 func (l *Linter) LintFiles(files map[string][]byte) ([]Advise, error) {
 	pkg := pkg{
 		fset:  token.NewFileSet(),
@@ -34,12 +41,16 @@ func (l *Linter) LintFiles(files map[string][]byte) ([]Advise, error) {
 	return pkg.lint()
 }
 
+// Advise this is struct contains fields for
+// help you point out some problems
 type Advise struct {
 	fName    string
 	position token.Position
 	file     *file
 }
 
+// String method get advise information in
+// understandable format
 func (a Advise) String() string {
 	return fmt.Sprintf("%s:%d:function %s is not covered any tests", a.file.filename, a.position.Line, a.fName)
 }
