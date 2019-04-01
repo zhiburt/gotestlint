@@ -18,7 +18,7 @@ func main() {
 	}
 
 	for _, path := range os.Args[1:] {
-		files, err := parseFolder(path)
+		files, err := parse(path)
 		_handleError(err)
 
 		l := lint.Linter{}
@@ -32,18 +32,24 @@ func main() {
 }
 
 var ParseFolderErr = errors.New("can't parse folder")
+var ErrNoGOFile = errors.New("can't parse no .go file")
+var ErrParseFile = errors.New("can't parse file")
 
 const RECURSIVEPATH = "./..."
 
-func parseFolder(path string) (map[string][]byte, error) {
+func parse(path string) (map[string][]byte, error) {
 	if path == RECURSIVEPATH {
-		return parse(".", true)
+		return parseFolder(".", true)
 	}
 
-	return parse(path, false)
+	if body, err := parseFile(path); err == nil {
+		return map[string][]byte{path: body}, nil
+	}
+
+	return parseFolder(path, false)
 }
 
-func parse(path string, recursive bool) (map[string][]byte, error) {
+func parseFolder(path string, recursive bool) (map[string][]byte, error) {
 	files := make(map[string][]byte)
 	information, err := ioutil.ReadDir(path)
 	if err != nil {
@@ -54,7 +60,7 @@ func parse(path string, recursive bool) (map[string][]byte, error) {
 		p := filepath.Join(path, info.Name())
 		if info.IsDir() {
 			if recursive {
-				m, err := parse(p, recursive)
+				m, err := parseFolder(p, recursive)
 				if err != nil {
 					return nil, err
 				}
@@ -63,18 +69,32 @@ func parse(path string, recursive bool) (map[string][]byte, error) {
 			}
 			continue
 		}
-		if strings.HasSuffix(info.Name(), ".go") == false {
-			continue
-		}
 
-		body, err := ioutil.ReadFile(p)
+		body, err := parseFile(p)
 		if err != nil {
-			return nil, ParseFolderErr
+			if err == ErrNoGOFile {
+				continue
+			}
+
+			return nil, err
 		}
 		files[info.Name()] = body
 	}
 
 	return files, err
+}
+
+func parseFile(path string) ([]byte, error) {
+	if strings.HasSuffix(path, ".go") == false {
+		return nil, ErrNoGOFile
+	}
+
+	body, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, ErrParseFile
+	}
+
+	return body, nil
 }
 
 func copyMapToMap(lhs, rhs map[string][]byte) {
