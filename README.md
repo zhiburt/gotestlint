@@ -16,7 +16,25 @@ lint.go:20:function LintFiles is not covered any tests
 lint.go:47:function String is not covered any tests
 ```
 
-if there're all functions covered by tests,
+there's a recursive variant for it
+
+```
+gotestlint ./...
+lint.go:27:function LintFiles is not covered any tests
+```
+
+It also can check only a bit files, something like this
+
+```
+gotestlint lint.go test_folder/test_folder.go 
+lint.go:20:function LintSource is not covered any tests
+lint.go:27:function LintFiles is not covered any tests
+lint.go:54:function String is not covered any tests
+test_folder/test_folder.go:3:function SomeFunc is not covered any tests
+...
+```
+
+if all functions are covered by tests,
 it won't show any messages
 
 ```
