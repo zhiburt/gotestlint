@@ -22,8 +22,8 @@ func TestLintSource(t *testing.T) {
 				"t.go": []byte("package t\n\nfunc FirstFoo(){\n}\n\nfunc SecondFoo(){\n}"),
 			},
 			expected: []string{
-				"t.go:3:there're not have any tests for FirstFoo",
-				"t.go:6:there're not have any tests for SecondFoo",
+				"t.go:3:function FirstFoo is not covered any tests",
+				"t.go:6:function SecondFoo is not covered any tests",
 			},
 		},
 		{
@@ -32,7 +32,7 @@ func TestLintSource(t *testing.T) {
 				"t_test.go": []byte("package t\n\nfunc TestSecondFoo(t *testing.T){\n}"),
 			},
 			expected: []string{
-				"t.go:3:there're not have any tests for FirstFoo",
+				"t.go:3:function FirstFoo is not covered any tests",
 			},
 		},
 		{
