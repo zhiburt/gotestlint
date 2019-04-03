@@ -7,32 +7,42 @@ import (
 )
 
 type (
+	// TestFolder is represent of test folder which can be deleted with all its files
+	// method Create() create all files if it's possible
+	// method Close() delete all created files
 	TestFolder interface {
 		Create(string, ...*File) ([]*File, error)
 		Close() error
 	}
 
+	// File is file of directory
+	// if Folder == nil this is file, else folder
 	File struct {
 		Name    string
 		Content []byte
 		Folder  []*File
 	}
 
-	DefaultTestFolder struct {
+	// defaultTestFolder implementation of TestFolder
+	defaultTestFolder struct {
 		roots []*File
 		path  string
 	}
 )
 
+// NewTestFolder returns TestFolder obj
 func NewTestFolder() TestFolder {
-	return &DefaultTestFolder{}
+	return &defaultTestFolder{}
 }
 
+// IsFolder checks this is folder or not
 func (f *File) IsFolder() bool {
 	return f.Folder != nil
 }
 
-func (folder *DefaultTestFolder) Create(path string, files ...*File) ([]*File, error) {
+// Create creates all files in path
+// that's does it recursively
+func (folder *defaultTestFolder) Create(path string, files ...*File) ([]*File, error) {
 	folder.path = path
 	folder.roots = files
 	var created []*File
@@ -49,9 +59,10 @@ func (folder *DefaultTestFolder) Create(path string, files ...*File) ([]*File, e
 	return created, nil
 }
 
-func (file *DefaultTestFolder) Close() error {
-	for _, root := range file.roots {
-		path := filepath.Join(file.path, root.Name)
+// Close removes all had created files
+func (folder *defaultTestFolder) Close() error {
+	for _, root := range folder.roots {
+		path := filepath.Join(folder.path, root.Name)
 		err := os.RemoveAll(path)
 		if err != nil {
 			return err
