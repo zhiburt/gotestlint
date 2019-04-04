@@ -64,10 +64,7 @@ func (p *pkg) lint() ([]Advise, error) {
 	var advs []Advise
 	for _, file := range p.files {
 		for _, f := range file.exportedFuncs() {
-			if f.isTestFunc() {
-				continue
-			}
-			if f.isNolint() {
+			if f.isTestFunc() || f.isNolint() {
 				continue
 			}
 
