@@ -1,8 +1,6 @@
 package parser_test
 
 import (
-	"fmt"
-	"io/ioutil"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -76,26 +74,4 @@ func TestParse(t *testing.T) {
 			}
 		})
 	}
-}
-
-func checkfolder(path string) (int, error) {
-	info, err := ioutil.ReadDir(path)
-	if err == nil {
-		return len(info), err
-	}
-	_, err = ioutil.ReadFile(path)
-	if err != nil {
-		return 0, err
-	}
-
-	return 1, nil
-}
-
-func keys(m map[string][]byte) []string {
-	var k []string
-	for key := range m {
-		k = append(k, fmt.Sprint(key))
-	}
-
-	return k
 }

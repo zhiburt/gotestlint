@@ -64,22 +64,17 @@ func (p *pkg) lint() ([]Advise, error) {
 	var advs []Advise
 	for _, file := range p.files {
 		for _, f := range file.exportedFuncs() {
-			if f.isTestFunc() {
-				continue
-			}
-			if f.isNolint() {
+			if f.isTestFunc() || f.isNolint() {
 				continue
 			}
 
-			if tstfile := p.testFileFor(f.file); tstfile != nil {
-				if _, err := tstfile.funcWithPrefix("Test" + f.f.Name.Name); err != nil {
-					advs = append(advs, Advise{
-						fName:    f.f.Name.Name,
-						file:     f.file,
-						position: p.fset.Position(f.pos),
-					})
-				}
-			} else {
+			if tstfile := p.testFileFor(f.file); tstfile == nil {
+				advs = append(advs, Advise{
+					fName:    f.f.Name.Name,
+					file:     f.file,
+					position: p.fset.Position(f.pos),
+				})
+			} else if _, err := tstfile.funcWithPrefix("Test" + f.f.Name.Name); err != nil {
 				advs = append(advs, Advise{
 					fName:    f.f.Name.Name,
 					file:     f.file,
