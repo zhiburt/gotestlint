@@ -1,7 +1,6 @@
 package parser_test
 
 import (
-	"fmt"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -75,13 +74,4 @@ func TestParse(t *testing.T) {
 			}
 		})
 	}
-}
-
-func keys(m map[string][]byte) []string {
-	var k []string
-	for key := range m {
-		k = append(k, fmt.Sprint(key))
-	}
-
-	return k
 }
