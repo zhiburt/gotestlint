@@ -71,15 +71,13 @@ func (p *pkg) lint() ([]Advise, error) {
 				continue
 			}
 
-			if tstfile := p.testFileFor(f.file); tstfile != nil {
-				if _, err := tstfile.funcWithPrefix("Test" + f.f.Name.Name); err != nil {
-					advs = append(advs, Advise{
-						fName:    f.f.Name.Name,
-						file:     f.file,
-						position: p.fset.Position(f.pos),
-					})
-				}
-			} else {
+			if tstfile := p.testFileFor(f.file); tstfile == nil {
+				advs = append(advs, Advise{
+					fName:    f.f.Name.Name,
+					file:     f.file,
+					position: p.fset.Position(f.pos),
+				})
+			} else if _, err := tstfile.funcWithPrefix("Test" + f.f.Name.Name); err != nil {
 				advs = append(advs, Advise{
 					fName:    f.f.Name.Name,
 					file:     f.file,
